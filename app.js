@@ -12,13 +12,13 @@ function sleep(ms) {
 
 async function demo(){
     while(true){
-        agent.socketSend("move", `-15 0`) // Размещение игрока на поле
+        agent.socketSend("move", `15 0`) // Размещение игрока на поле
         await sleep(time)
-        agent.socketSend("move", `0 15`)
+        agent.socketSend("move", `0 0`)
         await sleep(time)
-        agent.socketSend("move", `15 0`)
+        agent.socketSend("move", `-15 -15`)
         await sleep(time)
-        agent.socketSend("move", `0 -15`)
+        agent.socketSend("move", `-15 15`)
         await sleep(time)
     }
 }
