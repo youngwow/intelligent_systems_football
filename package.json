@@ -1,0 +1,11 @@
+{
+  "name": "intelligent_systems_football",
+  "version": "1.0.0",
+  "description": "Intelligent systems. Programming players in virtual football.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
