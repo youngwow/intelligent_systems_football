@@ -7,11 +7,11 @@ class Agent {
         this.position = "l" // По умолчанию левая половина поля
         this.run = false // Игра начата
         this.act = null // Действия
-        this.r1 = readline.createInterface({ // Чтение консоли
+        this.rl = readline.createInterface({ // Чтение консоли
             input: process.stdin,
             output: process.stdout
         })
-        this.r1.on('line', (input) => {  // Обработка строки из консоли
+        this.rl.on('line', (input) => {  // Обработка строки из консоли
             if(this.run) { // Если игра начата
         // ДВижения вперед, вправо, влево, удар по мячу
                 if("w" == input) this.act = {n: "dash", v: 100}

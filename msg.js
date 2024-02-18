@@ -21,18 +21,18 @@ module.exports = {
     parseInner(array, index, res){
         // Пока не встретится закрывающая скобка
         while (array[index.idx] != ")"){
-        // Если внутри еще одна скобка
-        if(array[index.idx] == "("){
-            let r = { p: []}
-            // Рекурсивный вызов с index
-            this.parse(array, index, r)
-            res.p.push(r)
-        } else{
-            // Одиночный параметр
-            let num = parseFloat(array[index.idx])
-            res.p.push(isNaN(num) ? array[index.idx] : num)
-            index.idx++
-        }
+            // Если внутри еще одна скобка
+            if(array[index.idx] == "("){
+                let r = { p: []}
+                // Рекурсивный вызов с index
+                this.parse(array, index, r)
+                res.p.push(r)
+            } else{
+                // Одиночный параметр
+                let num = parseFloat(array[index.idx])
+                res.p.push(isNaN(num) ? array[index.idx] : num)
+                index.idx++
+            }
         }
         index.idx++
     },
