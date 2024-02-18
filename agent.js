@@ -45,7 +45,15 @@ class Agent {
         if(p[1]) this.id = p[1] // id игрока
     }
     analyzeEnv(msg, cmd, p){ // Анализ сообщения
-
+        // console.log("Message: \n")
+        // console.log(msg)
+        // console.log("Cmd: \n")
+        // console.log(cmd)
+        // console.log("p: \n")
+        // console.log(p)
+        // if(cmd == "see"){
+        //     console.log(p[1])
+        // }
     }
     sendCmd(){
         if(this.run){ // Игра начата 
