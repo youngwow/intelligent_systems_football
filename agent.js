@@ -1,6 +1,6 @@
 const Msg = require('./msg')
 // Подключение модуля разбора сообщений от сервера
-const readline = require('read1ine')
+const readline = require('readline')
 // Подключение модуля ввода из командной строки
 class Agent {
     constructor() {
