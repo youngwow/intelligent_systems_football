@@ -1,9 +1,11 @@
 const Msg = require('./msg')
 // Подключение модуля разбора сообщений от сервера
 const readline = require('readline')
+const { Flags, getPos3Flags } = require('./support.js')
 // Подключение модуля ввода из командной строки
 class Agent {
-    constructor() {
+    constructor(teamName) {
+        this.teamName = teamName // Имя своей команды
         this.position = "l" // По умолчанию левая половина поля
         this.run = false // Игра начата
         this.act = null // Действия
@@ -20,6 +22,15 @@ class Agent {
                 if("s" == input) this.act = {n: "kick", v: 100}
         }
         })
+        this.x = null
+        this.y = null
+        this.view_mode = null
+        this.stamina = null
+        this.speed = null
+        this.headAngle = null
+        this.kick = null
+        this.dash = null
+
     }
     msgGot(msg) { // Получение сообщения
         let data = msg.toString('utf8') // ПРиведение
@@ -45,15 +56,70 @@ class Agent {
         if(p[1]) this.id = p[1] // id игрока
     }
     analyzeEnv(msg, cmd, p){ // Анализ сообщения
-        // console.log("Message: \n")
         // console.log(msg)
-        // console.log("Cmd: \n")
-        // console.log(cmd)
-        // console.log("p: \n")
-        // console.log(p)
-        // if(cmd == "see"){
-        //     console.log(p[1])
-        // }
+        if(cmd == "sense_body"){
+            for (let obj of p) {
+                if (obj.cmd == 'head_angle') {
+                    this.head_angle = obj.p[0]
+                }
+                if (obj.cmd == 'speed') {
+                    this.DirectionOfSpeed = obj.p[1]
+                }
+            }
+        }
+        if(cmd == "see"){
+            // console.log(p)
+            let flagsCoord = []
+            let flagsDist = []
+            
+            for (let i = 1; i < p.length; i++) {
+                const obj = p[i]
+                const objName = obj.cmd.p
+                // console.log(objName)
+                if(objName.includes('f')) {
+                    const flagName = objName.join('')
+                    const flagCoords = Flags[flagName]
+                    const flagDist = obj.p[0]
+                    flagsCoord.push(flagCoords)
+                    flagsDist.push(flagDist)
+                    if(flagsCoord.length < 3) {
+                        flagsCoord.push(flagCoords)
+                        flagsDist.push(flagDist)
+                    }
+                }
+            }
+            // console.log(p[0])
+            // console.log(flagsCoord, flagsDist)
+
+            if (flagsCoord.length === 3){
+                res = getPos3Flags(flagsCoord, flagsDist)
+                this.x = res.x
+                this.y = res.y
+            }
+            if ((this.x !== null) && (this.y !== null)){
+                // console.log("Координаты игрока:")
+                // console.log(this.x, this.y)
+            }
+            for (let i = 1; i < p.length; i++) {
+                const obj = p[i]
+                const objName = obj.cmd.p
+                if (objName.includes('p')){
+                    const anotherTeamName = objName[1]
+                    if (this.teamName !== anotherTeamName){
+                        const enemyDist = obj.p[0]
+                        const enemyAngle = this.DirectionOfSpeed + this.head_angle - obj.p[1]
+                        const enemyAngleRad = (enemyAngle * 180) / Math.PI
+                        // console.log(enemyDist)
+                        const enemyX = this.x + Math.cos(enemyAngleRad) * enemyDist
+                        const enemyY = this.y + Math.sin(enemyAngleRad) * enemyDist
+                        console.log("Координаты противника:")
+                        console.log(enemyX, enemyY)
+                    }
+                }
+            }
+            
+            
+        }
     }
     sendCmd(){
         if(this.run){ // Игра начата 
